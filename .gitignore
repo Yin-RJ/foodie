@@ -1,0 +1,9 @@
+/foodie-api/target/
+/foodie-mapper/target/
+/.idea/
+/foodie-api/src/test/
+/foodie-service/target/
+
+/foodie-common/target/
+/foodie-service/src/test/
+/foodie-project.iml
