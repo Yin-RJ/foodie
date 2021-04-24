@@ -3,6 +3,8 @@ package com.yinrj.service.impl;
 import com.yinrj.dao.UsersDao;
 import com.yinrj.service.PassportService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author yinrongjie
@@ -25,6 +27,7 @@ public class PassportServiceImpl implements PassportService {
      * @param username
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public boolean isExistUsername(String username) {
         Integer res = usersDao.existUsername(username);
