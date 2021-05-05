@@ -1,9 +1,11 @@
 package com.yinrj.controller;
 
 import com.yinrj.service.impl.PassportServiceImpl;
+import com.yinrj.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,11 +27,11 @@ public class PassportController {
     @GetMapping("/isExistUsername")
     @ResponseBody
     @ApiOperation("用户名是否存在")
-    public int isExistUsername(@RequestParam String username) {
+    public R isExistUsername(@RequestParam String username) {
         if (StringUtils.isBlank(username)) {
-            return 500;
+            return R.error("用户名不能为空");
         }
         boolean res = passportService.isExistUsername(username);
-        return res ? 500:200;
+        return res ? R.error("用户名已经存在"):R.ok();
     }
 }

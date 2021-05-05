@@ -1,10 +1,13 @@
 package com.yinrj.service.impl;
 
 import com.yinrj.dao.UsersDao;
+import com.yinrj.dto.UserDto;
+import com.yinrj.pojo.Users;
 import com.yinrj.service.PassportService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * @author yinrongjie
@@ -14,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class PassportServiceImpl implements PassportService {
+
+    private static final String DEFAULT_IMAGE = "http://115.159.208.98/images/1.jpg";
 
     private final UsersDao usersDao;
 
@@ -32,5 +37,20 @@ public class PassportServiceImpl implements PassportService {
     public boolean isExistUsername(String username) {
         Integer res = usersDao.existUsername(username);
         return res != 0;
+    }
+
+    /**
+     * 注册用户
+     *
+     * @param userDto
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public Users registerUser(UserDto userDto) {
+        Users users = new Users();
+
+
+        return null;
     }
 }
