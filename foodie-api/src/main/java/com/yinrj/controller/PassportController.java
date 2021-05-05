@@ -24,7 +24,7 @@ public class PassportController {
         this.passportService = passportService;
     }
 
-    @GetMapping("/isExistUsername")
+    @GetMapping("/usernameIsExist")
     @ResponseBody
     @ApiOperation("用户名是否存在")
     public R isExistUsername(@RequestParam String username) {
