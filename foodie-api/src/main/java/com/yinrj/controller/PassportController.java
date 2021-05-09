@@ -6,7 +6,6 @@ import com.yinrj.pojo.Users;
 import com.yinrj.service.impl.PassportServiceImpl;
 import com.yinrj.utils.CookieUtils;
 import com.yinrj.utils.IMOOCJSONResult;
-import com.yinrj.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
