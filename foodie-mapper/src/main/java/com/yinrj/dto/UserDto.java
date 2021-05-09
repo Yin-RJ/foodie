@@ -4,7 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * @author yinrongjie
@@ -21,6 +23,7 @@ public class UserDto {
 
     @ApiModelProperty("密码")
     @NotBlank(message = "密码不能为空")
+    @Size(min = 6, message = "密码长度不能少于6位")
     private String password;
 
     @ApiModelProperty("确认密码")

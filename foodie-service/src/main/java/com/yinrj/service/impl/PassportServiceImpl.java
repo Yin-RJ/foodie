@@ -2,12 +2,17 @@ package com.yinrj.service.impl;
 
 import com.yinrj.dao.UsersDao;
 import com.yinrj.dto.UserDto;
+import com.yinrj.enums.Sex;
 import com.yinrj.pojo.Users;
 import com.yinrj.service.PassportService;
+import com.yinrj.utils.EncryptUtil;
+import com.yinrj.utils.UuidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.Date;
 
 /**
  * @author yinrongjie
@@ -49,8 +54,19 @@ public class PassportServiceImpl implements PassportService {
     @Override
     public Users registerUser(UserDto userDto) {
         Users users = new Users();
+        String userId = UuidUtil.getShortUuid();
+        users.setId(userId);
 
+        users.setPassword(EncryptUtil.encrypt(userDto.getPassword()));
+        users.setUsername(userDto.getUsername());
+        users.setNickname(userDto.getUsername());
+        users.setFace(DEFAULT_IMAGE);
+        users.setSex(Sex.SECRET.type);
 
-        return null;
+        users.setCreatedTime(new Date());
+        users.setUpdatedTime(new Date());
+
+        usersDao.insert(users);
+        return users;
     }
 }
