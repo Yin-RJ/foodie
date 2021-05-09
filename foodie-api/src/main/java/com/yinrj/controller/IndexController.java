@@ -59,4 +59,11 @@ public class IndexController {
         logger.info("========= 获取商品子分类 ============");
         return IMOOCJSONResult.ok(categoryService.queryAllCategoryOfRoot(rootCatId));
     }
+
+    @GetMapping("/sixNewItems/{rootCatId}")
+    @ApiOperation(value = "查询每个一级分类下的最新6条商品数据")
+    public IMOOCJSONResult queryItemByRootCat(@ApiParam(name = "rootCatId", value = "一级分类id", required = true) @NotBlank(message = "分类不存在") @PathVariable int rootCatId) {
+        logger.info("========= 查询每个一级分类下的最新6条商品数据 ============");
+        return IMOOCJSONResult.ok(categoryService.queryItemByRootCat(rootCatId));
+    }
 }

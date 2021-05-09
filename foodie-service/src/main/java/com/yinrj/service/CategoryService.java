@@ -2,6 +2,7 @@ package com.yinrj.service;
 
 import com.yinrj.pojo.Category;
 import com.yinrj.vo.CategoryVO;
+import com.yinrj.vo.NewItemsVO;
 
 import java.util.List;
 
@@ -24,4 +25,11 @@ public interface CategoryService {
      * @return
      */
     List<CategoryVO> queryAllCategoryOfRoot(int rootId);
+
+    /**
+     * 查询一级分类下的最新的6个商品
+     * @param rootId
+     * @return
+     */
+    List<NewItemsVO> queryItemByRootCat(int rootId);
 }

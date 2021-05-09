@@ -4,6 +4,7 @@ import com.yinrj.dao.CategoryDao;
 import com.yinrj.pojo.Category;
 import com.yinrj.service.CategoryService;
 import com.yinrj.vo.CategoryVO;
+import com.yinrj.vo.NewItemsVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,5 +51,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryVO> queryAllCategoryOfRoot(int rootId) {
         return categoryDao.querySubCategory(rootId);
+    }
+
+    /**
+     * 查询一级分类下的最新的6个商品
+     *
+     * @param rootId
+     * @return
+     */
+    @Override
+    public List<NewItemsVO> queryItemByRootCat(int rootId) {
+        return categoryDao.queryItemByRootCat(rootId);
     }
 }
