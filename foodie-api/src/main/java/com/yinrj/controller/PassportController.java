@@ -5,6 +5,7 @@ import com.yinrj.dto.UserDto;
 import com.yinrj.pojo.Users;
 import com.yinrj.service.impl.PassportServiceImpl;
 import com.yinrj.utils.CookieUtils;
+import com.yinrj.utils.IMOOCJSONResult;
 import com.yinrj.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 /**
  * @author yinrongjie
@@ -34,33 +34,45 @@ public class PassportController {
 
     @GetMapping("/usernameIsExist")
     @ApiOperation("用户名是否存在")
-    public R isExistUsername(@RequestParam String username) {
+    public IMOOCJSONResult isExistUsername(@RequestParam String username) {
         if (StringUtils.isBlank(username)) {
-            return R.error("用户名不能为空");
+            return IMOOCJSONResult.errorException("用户名不能为空");
         }
         boolean res = passportService.isExistUsername(username);
-        return res ? R.error("用户名已经存在"):R.ok();
+        return res ? IMOOCJSONResult.errorException("用户名已经存在"):IMOOCJSONResult.ok();
     }
 
     @PostMapping("/regist")
     @ApiOperation("注册用户")
-    public R registerUser(@Valid @RequestBody UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
+    public IMOOCJSONResult registerUser(@Validated(UserDto.Regiter.class) @RequestBody UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
         String password = userDto.getPassword();
         String confirmPassword = userDto.getConfirmPassword();
 
         if (!password.equals(confirmPassword)) {
-            return R.error("密码与确认密码输入不一致");
+            return IMOOCJSONResult.errorException("密码与确认密码输入不一致");
         }
 
         boolean isUserExist = passportService.isExistUsername(userDto.getUsername());
         if (isUserExist) {
-            return R.error("用户名已经存在");
+            return IMOOCJSONResult.errorException("用户名已经存在");
         }
 
         Users users = passportService.registerUser(userDto);
 
         CookieUtils.setCookie(request, response, "user", JSONUtil.toJsonStr(setNullProperty(users)), true);
-        return R.ok();
+        return IMOOCJSONResult.ok();
+    }
+
+    @PostMapping("/login")
+    @ApiOperation("用户登录")
+    public IMOOCJSONResult login(@Validated @RequestBody UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
+        Users users = passportService.login(userDto);
+        if (users == null) {
+            return IMOOCJSONResult.errorException("用户错误");
+        }
+
+        CookieUtils.setCookie(request, response, "user", JSONUtil.toJsonStr(setNullProperty(users)), true);
+        return IMOOCJSONResult.ok();
     }
 
     private Users setNullProperty(Users userResult) {

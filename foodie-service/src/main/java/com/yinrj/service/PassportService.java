@@ -23,4 +23,11 @@ public interface PassportService {
      * @return
      */
     Users registerUser(UserDto userDto);
+
+    /**
+     * 用户登陆
+     * @param userDto
+     * @return
+     */
+    Users login(UserDto userDto);
 }

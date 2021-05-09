@@ -27,6 +27,8 @@ public class UserDto {
     private String password;
 
     @ApiModelProperty("确认密码")
-    @NotBlank(message = "确认密码不能为空")
+    @NotBlank(message = "确认密码不能为空", groups = Regiter.class)
     private String confirmPassword;
+
+    public interface Regiter{}
 }

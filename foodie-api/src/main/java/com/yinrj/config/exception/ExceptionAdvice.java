@@ -1,5 +1,6 @@
 package com.yinrj.config.exception;
 
+import com.yinrj.utils.IMOOCJSONResult;
 import com.yinrj.utils.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +26,13 @@ public class ExceptionAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public R validateExceptionHandle(Exception e) {
+    public IMOOCJSONResult validateExceptionHandle(Exception e) {
         LOG.error(e.getMessage());
         if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException exception = (MethodArgumentNotValidException) e;
             String exceptionMsg = Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage();
-            return R.error(exceptionMsg);
+            return IMOOCJSONResult.errorException(exceptionMsg);
         }
-        return R.error("内部异常");
+        return IMOOCJSONResult.errorException("内部异常");
     }
 }

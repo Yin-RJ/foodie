@@ -10,7 +10,7 @@ import com.yinrj.utils.UuidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 
@@ -68,5 +68,21 @@ public class PassportServiceImpl implements PassportService {
 
         usersDao.insert(users);
         return users;
+    }
+
+    /**
+     * 用户登陆
+     *
+     * @param userDto
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users login(UserDto userDto) {
+        Example example = new Example(Users.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", userDto.getUsername());
+        criteria.andEqualTo("password", EncryptUtil.encrypt(userDto.getPassword()));
+        return usersDao.selectOneByExample(example);
     }
 }
