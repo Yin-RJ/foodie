@@ -1,9 +1,9 @@
 package com.yinrj.dao;
 
 import com.yinrj.pojo.Users;
-import org.apache.ibatis.annotations.Mapper;
+import tk.mybatis.mapper.common.Mapper;
 
-@Mapper
-public interface UsersDao {
+
+public interface UsersDao extends Mapper<Users> {
     Integer existUsername(String username);
 }

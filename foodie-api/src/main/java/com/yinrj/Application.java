@@ -1,14 +1,9 @@
 package com.yinrj;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.util.pattern.PathPatternParser;
+import tk.mybatis.spring.annotation.MapperScan;
 
 /**
  * @author yinrongjie
@@ -17,7 +12,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * @date 2021/4/21
  */
 @SpringBootApplication
-@MapperScan(basePackages = "com.yinrj")
+@MapperScan("com.yinrj")
 @EnableConfigurationProperties
 public class Application {
     public static void main(String[] args) {
