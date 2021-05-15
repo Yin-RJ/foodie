@@ -1,21 +1,24 @@
 package com.yinrj.service.impl;
 
-import com.yinrj.dao.ItemsDao;
-import com.yinrj.dao.ItemsImgDao;
-import com.yinrj.dao.ItemsParamDao;
-import com.yinrj.dao.ItemsSpecDao;
-import com.yinrj.pojo.Items;
-import com.yinrj.pojo.ItemsImg;
-import com.yinrj.pojo.ItemsParam;
-import com.yinrj.pojo.ItemsSpec;
+import com.github.pagehelper.PageHelper;
+import com.yinrj.dao.*;
+import com.yinrj.enums.CommentsLevelEnum;
+import com.yinrj.pojo.*;
 import com.yinrj.service.ItemService;
+import com.yinrj.utils.DesensitizationUtil;
+import com.yinrj.utils.PagedGridResult;
+import com.yinrj.utils.PagedGridUtil;
+import com.yinrj.vo.CommentsLevelCounts;
+import com.yinrj.vo.CommentsVO;
 import com.yinrj.vo.ItemInfoVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yinrongjie
@@ -34,12 +37,15 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemsDao itemsDao;
 
+    private final ItemsCommentsDao itemsCommentsDao;
+
     public ItemServiceImpl(ItemsImgDao itemsImgDao, ItemsSpecDao itemsSpecDao, ItemsParamDao itemsParamDao,
-                           ItemsDao itemsDao) {
+                           ItemsDao itemsDao, ItemsCommentsDao itemsCommentsDao) {
         this.itemsImgDao = itemsImgDao;
         this.itemsSpecDao = itemsSpecDao;
         this.itemsParamDao = itemsParamDao;
         this.itemsDao = itemsDao;
+        this.itemsCommentsDao = itemsCommentsDao;
     }
 
     /**
@@ -72,5 +78,46 @@ public class ItemServiceImpl implements ItemService {
         List<ItemsSpec> itemsSpecList = itemsSpecDao.selectByExample(specExample);
 
         return new ItemInfoVO(items, itemsImgList, itemsSpecList, itemsParam);
+    }
+
+    /**
+     * 获得商品的各评价等级的数量
+     *
+     * @param itemId
+     * @return
+     */
+    @Override
+    public CommentsLevelCounts getCommentsLevelCounts(String itemId) {
+        ItemsComments itemsComments = new ItemsComments();
+        itemsComments.setItemId(itemId);
+        itemsComments.setCommentLevel(CommentsLevelEnum.GOOD.type);
+        Integer goodCounts = itemsCommentsDao.selectCount(itemsComments);
+        itemsComments.setCommentLevel(CommentsLevelEnum.NOMAL.type);
+        Integer nomalCounts = itemsCommentsDao.selectCount(itemsComments);
+        itemsComments.setCommentLevel(CommentsLevelEnum.BAD.type);
+        Integer badCounts = itemsCommentsDao.selectCount(itemsComments);
+        return new CommentsLevelCounts(goodCounts + nomalCounts + badCounts, goodCounts, nomalCounts, badCounts);
+    }
+
+    /**
+     * 分页查询评论信息
+     *
+     * @param itemId
+     * @param level
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedGridResult getComments(String itemId, Integer level, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("itemId", itemId);
+        map.put("level", level);
+        PageHelper.startPage(page, pageSize);
+        List<CommentsVO> commentsVOList = itemsCommentsDao.getCommentsByItemId(map);
+        for (CommentsVO vo : commentsVOList) {
+            vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
+        }
+        return PagedGridUtil.setter(commentsVOList, page);
     }
 }

@@ -42,3 +42,7 @@ server:
     uri-encoding: UTF-8
   max-http-header-size: 80KB
 
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yinrj.dao.ItemsCommentsDao">
+    <select id="getCommentsByItemId" resultType="com.yinrj.vo.CommentsVO" parameterType="Map">
+        select
+            ic.comment_level as commentLevel,
+            ic.created_time as createTime,
+            ic.content as content,
+            u.face as userFace,
+            u.nickname as nickname,
+            ic.sepc_name as sepcName
+        from
+            items_comments as ic
+                left join
+            users as u
+            on
+                ic.user_id = u.id
+        where
+            ic.item_id = #{paramMap.itemId}
+          <if test="paramMap.level != null and paramMap.level != ''">
+              and
+              ic.comment_level = #{paramMap.level}
+          </if>
+
+    </select>
+</mapper>
