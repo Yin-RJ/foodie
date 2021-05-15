@@ -34,4 +34,24 @@ public interface ItemService {
      * @return
      */
     PagedGridResult getComments(String itemId, Integer level, Integer page, Integer pageSize);
+
+    /**
+     * 通过名称搜索商品
+     * @param keywords
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedGridResult searchItemsByName(String keywords, String sort, Integer page, Integer pageSize);
+
+    /**
+     * 通过三级标签搜索商品
+     * @param catId
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedGridResult searchItemsByThirdCat(Integer catId, String sort, Integer page, Integer pageSize);
 }

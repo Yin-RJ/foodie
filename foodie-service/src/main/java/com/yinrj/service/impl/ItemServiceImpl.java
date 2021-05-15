@@ -11,6 +11,7 @@ import com.yinrj.utils.PagedGridUtil;
 import com.yinrj.vo.CommentsLevelCounts;
 import com.yinrj.vo.CommentsVO;
 import com.yinrj.vo.ItemInfoVO;
+import com.yinrj.vo.ItemSearchVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,9 +58,6 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public ItemInfoVO getItemInfoByItemId(String itemId) {
-//        Example itemExample = new Example(Items.class);
-//        Example.Criteria itemCriteria = itemExample.createCriteria();
-//        itemCriteria.andEqualTo("id", itemId);
         Items items = itemsDao.selectByPrimaryKey(itemId);
 
         Example paramExample = new Example(ItemsParam.class);
@@ -86,6 +84,7 @@ public class ItemServiceImpl implements ItemService {
      * @param itemId
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public CommentsLevelCounts getCommentsLevelCounts(String itemId) {
         ItemsComments itemsComments = new ItemsComments();
@@ -108,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
      * @param pageSize
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PagedGridResult getComments(String itemId, Integer level, Integer page, Integer pageSize) {
         Map<String, Object> map = new HashMap<>();
@@ -119,5 +119,45 @@ public class ItemServiceImpl implements ItemService {
             vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
         }
         return PagedGridUtil.setter(commentsVOList, page);
+    }
+
+    /**
+     * 通过名称搜索商品
+     *
+     * @param keywords
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItemsByName(String keywords, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<ItemSearchVO> itemSearchVOList = itemsDao.searchItemsByName(map);
+        return PagedGridUtil.setter(itemSearchVOList, page);
+    }
+
+    /**
+     * 通过三级标签搜索商品
+     *
+     * @param catId
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItemsByThirdCat(Integer catId, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("catId", catId);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<ItemSearchVO> itemSearchVOList = itemsDao.searchItemsByThirdCat(map);
+        return PagedGridUtil.setter(itemSearchVOList, page);
     }
 }
