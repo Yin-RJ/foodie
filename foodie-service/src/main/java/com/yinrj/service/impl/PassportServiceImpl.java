@@ -2,7 +2,7 @@ package com.yinrj.service.impl;
 
 import com.yinrj.dao.UsersDao;
 import com.yinrj.dto.UserDto;
-import com.yinrj.enums.Sex;
+import com.yinrj.enums.SexEnum;
 import com.yinrj.pojo.Users;
 import com.yinrj.service.PassportService;
 import com.yinrj.utils.EncryptUtil;
@@ -61,7 +61,7 @@ public class PassportServiceImpl implements PassportService {
         users.setUsername(userDto.getUsername());
         users.setNickname(userDto.getUsername());
         users.setFace(DEFAULT_IMAGE);
-        users.setSex(Sex.SECRET.type);
+        users.setSex(SexEnum.SECRET.type);
 
         users.setCreatedTime(new Date());
         users.setUpdatedTime(new Date());

@@ -35,10 +35,10 @@ public class PassportController {
     @ApiOperation("用户名是否存在")
     public IMOOCJSONResult isExistUsername(@RequestParam String username) {
         if (StringUtils.isBlank(username)) {
-            return IMOOCJSONResult.errorException("用户名不能为空");
+            return IMOOCJSONResult.errorMsg("用户名不能为空");
         }
         boolean res = passportService.isExistUsername(username);
-        return res ? IMOOCJSONResult.errorException("用户名已经存在"):IMOOCJSONResult.ok();
+        return res ? IMOOCJSONResult.errorMsg("用户名已经存在"):IMOOCJSONResult.ok();
     }
 
     @PostMapping("/regist")
@@ -48,12 +48,12 @@ public class PassportController {
         String confirmPassword = userDto.getConfirmPassword();
 
         if (!password.equals(confirmPassword)) {
-            return IMOOCJSONResult.errorException("密码与确认密码输入不一致");
+            return IMOOCJSONResult.errorMsg("密码与确认密码输入不一致");
         }
 
         boolean isUserExist = passportService.isExistUsername(userDto.getUsername());
         if (isUserExist) {
-            return IMOOCJSONResult.errorException("用户名已经存在");
+            return IMOOCJSONResult.errorMsg("用户名已经存在");
         }
 
         Users users = passportService.registerUser(userDto);
@@ -67,7 +67,7 @@ public class PassportController {
     public IMOOCJSONResult login(@Validated @RequestBody UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
         Users users = passportService.login(userDto);
         if (users == null) {
-            return IMOOCJSONResult.errorException("用户错误");
+            return IMOOCJSONResult.errorMsg("用户错误");
         }
 
         CookieUtils.setCookie(request, response, "user", JSONUtil.toJsonStr(setNullProperty(users)), true);
