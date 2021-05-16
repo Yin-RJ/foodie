@@ -92,4 +92,11 @@ public class ItemsController {
         }
         return IMOOCJSONResult.ok(itemService.searchItemsByThirdCat(catId, sort, page, pageSize));
     }
+
+    @ApiOperation(value = "根据规格属性刷新购物车的商品信息", notes = "根据规格属性刷新购物车的商品信息", httpMethod = "GET")
+    @GetMapping("/refresh")
+    public IMOOCJSONResult refresh(@NotBlank(message = "规格属性为空") @ApiParam(name = "itemSpecIds", value = "规格属性", required = true)
+                                                 @RequestParam String itemSpecIds) {
+        return IMOOCJSONResult.ok(itemService.searchItemsBySpecId(itemSpecIds));
+    }
 }

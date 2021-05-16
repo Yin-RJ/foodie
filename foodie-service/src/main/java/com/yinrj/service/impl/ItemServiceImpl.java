@@ -8,18 +8,13 @@ import com.yinrj.service.ItemService;
 import com.yinrj.utils.DesensitizationUtil;
 import com.yinrj.utils.PagedGridResult;
 import com.yinrj.utils.PagedGridUtil;
-import com.yinrj.vo.CommentsLevelCounts;
-import com.yinrj.vo.CommentsVO;
-import com.yinrj.vo.ItemInfoVO;
-import com.yinrj.vo.ItemSearchVO;
+import com.yinrj.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author yinrongjie
@@ -159,5 +154,19 @@ public class ItemServiceImpl implements ItemService {
         PageHelper.startPage(page, pageSize);
         List<ItemSearchVO> itemSearchVOList = itemsDao.searchItemsByThirdCat(map);
         return PagedGridUtil.setter(itemSearchVOList, page);
+    }
+
+    /**
+     * 通过规格属性id获取商品信息
+     *
+     * @param specIds
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<ShopCartVO> searchItemsBySpecId(String specIds) {
+        String[] ids = specIds.split(",");
+        List<String> specs = Arrays.asList(ids);
+        return itemsDao.refreshShopcartBySpecId(specs);
     }
 }

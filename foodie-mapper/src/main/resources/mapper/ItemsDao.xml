@@ -63,4 +63,29 @@
             </otherwise>
         </choose>
     </select>
+
+    <select id="refreshShopcartBySpecId" resultType="com.yinrj.vo.ShopCartVO" parameterType="List">
+        select
+            i.id as itemId,
+            i.item_name as itemName,
+            ii.url as itemImgUrl,
+            its.price_discount as priceDiscount,
+            its.price_normal as priceNormal,
+            its.name as specName,
+            its.id as specId
+        from
+            items_spec its
+                left join
+            items i
+            on its.item_id = i.id
+                left join
+            items_img ii
+            on i.id = ii.item_id
+        where
+            ii.is_main = 1
+        and its.id in
+        <foreach collection="paramList" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

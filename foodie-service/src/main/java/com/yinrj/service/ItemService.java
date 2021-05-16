@@ -3,6 +3,9 @@ package com.yinrj.service;
 import com.yinrj.utils.PagedGridResult;
 import com.yinrj.vo.CommentsLevelCounts;
 import com.yinrj.vo.ItemInfoVO;
+import com.yinrj.vo.ShopCartVO;
+
+import java.util.List;
 
 /**
  * @author yinrongjie
@@ -54,4 +57,11 @@ public interface ItemService {
      * @return
      */
     PagedGridResult searchItemsByThirdCat(Integer catId, String sort, Integer page, Integer pageSize);
+
+    /**
+     * 通过规格属性id获取商品信息
+     * @param specIds
+     * @return
+     */
+    List<ShopCartVO> searchItemsBySpecId(String specIds);
 }
